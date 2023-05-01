@@ -82,10 +82,11 @@ class Individual:
 			self.training_Y = Tr_y
 
 			self.model = self.createModel()
-	
-			hyper_X = self.convert(Tr_x)
+			print("Model created:", self.model)  # Add this line to check if the model is being created
 
-			self.model.fit(hyper_X,Tr_y)
+			hyper_X = self.convert(Tr_x)
+			self.model.fit(hyper_X, Tr_y)
+
 
 	def getHead(self):
 		return self.head.clone()

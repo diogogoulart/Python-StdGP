@@ -1,9 +1,44 @@
 from .Individual import Individual
-from .GeneticOperators import getElite, getOffspring, discardDeep
+#from .GeneticOperators import getElite, getOffspring, discardDeep
 import multiprocessing as mp
 import time
 
 from random import Random
+
+from random import choice
+
+def getElite(population, n):
+    return population[:n]
+
+def getOffspring(rng, population, tournament_size):
+    parent1 = double_tournament_selection(rng, population, tournament_size)
+    parent2 = double_tournament_selection(rng, population, tournament_size)
+    child = parent1.crossover(rng, parent2)
+    child.mutate(rng)
+    return [child]
+
+def discardDeep(individual, max_depth):
+    if individual.getDepth() > max_depth:
+        individual.prun(max_depth)
+    return individual
+
+def double_tournament_selection(rng, population, tournament_size, switch=False, Sf=None, Sp=None):
+    if not switch:
+        Sf = tournament_size
+        Sp = tournament_size
+
+    # First tournament based on fitness
+    fitness_tournament = [choice(population) for _ in range(Sf)]
+    fitness_tournament.sort(reverse=True)
+    selected = fitness_tournament[0]
+
+    # Second tournament based on parsimony
+    parsimony_tournament = [choice(population) for _ in range(Sp)]
+    parsimony_tournament.sort(key=lambda x: x.getSize())
+    parsimony_selected = parsimony_tournament[0]
+
+    return parsimony_selected
+
 
 # 
 # By using this file, you are agreeing to this product's EULA
@@ -313,7 +348,7 @@ class StdGP:
 		newPopulation = []
 		newPopulation.extend(getElite(self.population, self.elitism_size))
 		while len(newPopulation) < self.population_size:
-			offspring = getOffspring(self.rng, self.population, self.tournament_size)
+			offspring = double_tournament_selection(self.rng, self.population, self.tournament_size)
 			offspring = discardDeep(offspring, self.max_depth)
 			newPopulation.extend(offspring)
 		self.population = newPopulation[:self.population_size]

@@ -211,12 +211,13 @@ class StdGP:
 			ind.create(self.rng)
 			self.population.append(ind)
 			
-			if self.Sf is not None and self.Sp is not None:
-				parent1 = double_tournament(self.population, self.Sf, self.Sp, self.switch, fitness_key=self.fitness_key)
-				parent2 = double_tournament(self.population, self.Sf, self.Sp, self.switch, fitness_key=self.fitness_key)
-			else:
-				parent1 = tournament(self.population, self.tournament_size, key=self.fitness_key)
-				parent2 = tournament(self.population, self.tournament_size, key=self.fitness_key)
+			for _ in range(self.population_size // 2):
+			    if self.Sf is not None and self.Sp is not None:
+				parent1 = double_tournament(self.population, self.Sf, self.Sp, self.switch, fitness_key=self.fitnessType)
+				parent2 = double_tournament(self.population, self.Sf, self.Sp, self.switch, fitness_key=self.fitnessType)
+			    else:
+				parent1 = tournament(self.population, self.tournament_size, key=self.fitnessType)
+				parent2 = tournament(self.population, self.tournament_size, key=self.fitnessType)
 
 		self.bestIndividual = self.population[0]
 		self.bestIndividual.fit(self.Tr_x, self.Tr_y)

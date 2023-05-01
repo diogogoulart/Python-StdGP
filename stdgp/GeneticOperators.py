@@ -63,26 +63,18 @@ def getElite(population,n):
 	return population[:n]
 
 
-def getOffspring(rng, population, tournament_size):
-	'''
-	Genetic Operator: Selects a genetic operator and returns a list with the 
-	offspring Individuals. The crossover GOs return two Individuals and the
-	mutation GO returns one individual. Individuals over the LIMIT_DEPTH are 
-	then excluded, making it possible for this method to return an empty list.
+# Modify the getOffspring function to use the double_tournament method
+def getOffspring(rng, population, Sf, Sp, do_fitness_first=False):
+    parent1 = double_tournament(rng, population, Sf, Sp, do_fitness_first)
+    parent2 = double_tournament(rng, population, Sf, Sp, do_fitness_first)
 
-	Parameters:
-	population (list): A list of Individuals, sorted from best to worse.
-	'''
-	isCross = rng.random()<0.5
+    offspring1 = parent1.crossover(parent2, rng)
+    offspring1.mutate(rng)
 
-	desc = None
+    offspring2 = parent2.crossover(parent1, rng)
+    offspring2.mutate(rng)
 
-	if isCross:
-		desc = STXO(rng, population, tournament_size)
-	else:
-		desc = STMUT(rng, population, tournament_size)
-
-	return desc
+    return [offspring1, offspring2]
 
 
 def discardDeep(population, limit):

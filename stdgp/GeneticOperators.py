@@ -9,16 +9,28 @@ from .Node import Node
 # Copyright ©2019-2022 J. E. Batista
 #
 
+def double_tournament(rng, population, Sf, Sp, switch=False, custom_fitness=None):
+	if switch:
+		size_tournament_winners = tournament(rng, population, Sf, custom_fitness)
+		fitness_tournament_winners = [size_tournament_winners[i] for i in rng.sample(range(Sf), Sp)]
+		return tournament(rng, fitness_tournament_winners, Sp)
+	else:
+		fitness_tournament_winners = tournament(rng, population, Sf, custom_fitness)
+		size_tournament_winners = [fitness_tournament_winners[i] for i in rng.sample(range(Sf), Sp)]
+		return tournament(rng, size_tournament_winners, Sp, custom_fitness)
 
-def tournament(rng, population,n):
-	'''
-	Selects "n" Individuals from the population and return a 
-	single Individual.
-	Parameters:
-	population (list): A list of Individuals, sorted from best to worse.
-	'''
-	candidates = [rng.randint(0,len(population)-1) for i in range(n)]
-	return population[min(candidates)]
+def tournament(rng, population, tournament_size, custom_fitness=None):
+	best = None
+	for _ in range(tournament_size):
+		competitor = rng.choice(population)
+		if custom_fitness:
+			competitor_fitness = custom_fitness(competitor)
+		else:
+			competitor_fitness = competitor.getFitness()
+		if best is None or competitor_fitness > best[1]:
+			best = (competitor, competitor_fitness)
+	return best[0]
+
 
 
 def getElite(population,n):

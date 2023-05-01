@@ -76,30 +76,30 @@ class StdGP:
 					threads=1, random_state=42, verbose=True, model_name="SimpleThresholdClassifier", fitnessType="Accuracy",
 					Sf=7, Sp=3, switch=False):
 
-	if sum([0 if op in [("+",2),("-",2),("*",2),("/",2)] else 0 for op in operators]) > 0:
-		print("[Warning] Some of the following operators may not be supported:", operators)
+		if sum([0 if op in [("+",2),("-",2),("*",2),("/",2)] else 0 for op in operators]) > 0:
+			print("[Warning] Some of the following operators may not be supported:", operators)
 
-	self.operators = operators
+		self.operators = operators
 
-	self.max_initial_depth = max_initial_depth
-	self.population_size = population_size
-	self.threads = max(1, threads)
-	self.random_state = random_state
-	self.rng = Random(random_state)
+		self.max_initial_depth = max_initial_depth
+		self.population_size = population_size
+		self.threads = max(1, threads)
+		self.random_state = random_state
+		self.rng = Random(random_state)
 
-	self.max_depth = max_depth
-	self.max_generation = max_generation
-	self.tournament_size = tournament_size
-	self.elitism_size = elitism_size
+		self.max_depth = max_depth
+		self.max_generation = max_generation
+		self.tournament_size = tournament_size
+		self.elitism_size = elitism_size
 
-	self.model_name = model_name
-	self.fitnessType = fitnessType
+		self.model_name = model_name
+		self.fitnessType = fitnessType
 
-	self.Sf = Sf
-	self.Sp = Sp
-	self.switch = switch
+		self.Sf = Sf
+		self.Sp = Sp
+		self.switch = switch
 
-	self.verbose = verbose
+		self.verbose = verbose
 
 
 

@@ -182,6 +182,13 @@ class StdGP:
 
 
 	def fit(self,Tr_x, Tr_y, Te_x = None, Te_y = None):
+		for _ in range(self.population_size // 2):
+			if self.Sf is not None and self.Sp is not None:
+				parent1 = double_tournament(self.population, self.Sf, self.Sp, self.switch, fitness_key=self.fitnessType)
+				parent2 = double_tournament(self.population, self.Sf, self.Sp, self.switch, fitness_key=self.fitnessType)
+			else:
+				parent1 = tournament(self.population, self.tournament_size, key=self.fitnessType)
+				parent2 = tournament(self.population, self.tournament_size, key=self.fitnessType)
 		if self.verbose:
 			print("  > Parameters")
 			print("    > Random State:       "+str(self.random_state))
@@ -210,14 +217,6 @@ class StdGP:
 			ind = Individual(self.operators, self.terminals, self.max_depth, self.model_name, self.fitnessType)
 			ind.create(self.rng)
 			self.population.append(ind)
-			
-			for _ in range(self.population_size // 2):
-			    if self.Sf is not None and self.Sp is not None:
-				parent1 = double_tournament(self.population, self.Sf, self.Sp, self.switch, fitness_key=self.fitnessType)
-				parent2 = double_tournament(self.population, self.Sf, self.Sp, self.switch, fitness_key=self.fitnessType)
-			    else:
-				parent1 = tournament(self.population, self.tournament_size, key=self.fitnessType)
-				parent2 = tournament(self.population, self.tournament_size, key=self.fitnessType)
 
 		self.bestIndividual = self.population[0]
 		self.bestIndividual.fit(self.Tr_x, self.Tr_y)

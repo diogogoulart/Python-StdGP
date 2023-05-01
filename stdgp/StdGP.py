@@ -1,5 +1,5 @@
 from .Individual import Individual
-from .GeneticOperators import getElite, getOffspring, discardDeep
+from .GeneticOperators import getElite, getOffspring, discardDeep, double_tournament
 import multiprocessing as mp
 import time
 

@@ -17,11 +17,11 @@ import warnings
 warnings.filterwarnings("ignore")
 
 class ClassifierNotTrainedError(Exception):
-    """ You tried to use the classifier before training it. """
+	""" You tried to use the classifier before training it. """
 
-    def __init__(self, expression, message = ""):
-        self.expression = expression
-        self.message = message
+	def __init__(self, expression, message = ""):
+		self.expression = expression
+		self.message = message
 
 
 class StdGP:

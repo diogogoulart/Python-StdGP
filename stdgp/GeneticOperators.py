@@ -9,6 +9,19 @@ from .Node import Node
 # Copyright ©2019-2022 J. E. Batista
 #
 
+def double_tournament(population, Sf, Sp, switch=False, fitness_key='fitness'):
+    # Perform Sf tournaments based on fitness or size, depending on the switch value
+    if switch:
+        winners = [tournament(population, Sf, key='size') for _ in range(Sp)]
+    else:
+        winners = [tournament(population, Sf, key=fitness_key) for _ in range(Sp)]
+
+    # Perform the final tournament based on size or fitness, depending on the switch value
+    if switch:
+        return tournament(winners, Sp, key=fitness_key)
+    else:
+        return tournament(winners, Sp, key='size')
+
 
 def tournament(rng, population,n):
 	'''

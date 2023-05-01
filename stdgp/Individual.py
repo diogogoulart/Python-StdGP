@@ -73,7 +73,7 @@ class Individual:
 			return SimpleThresholdClassifier()
 
 
-	def fit(self, Tr_x, Tr_y):
+	def fit(self, Tr_x, Tr_y, Te_x=None, Te_y=None):
 		'''
 		Trains the classifier which will be used in the fitness function
 		'''
@@ -86,6 +86,11 @@ class Individual:
 
 			hyper_X = self.convert(Tr_x)
 			self.model.fit(hyper_X, Tr_y)
+
+		if Te_x is not None and Te_y is not None:
+			# Process the test data here
+			pass
+
 
 
 	def getHead(self):

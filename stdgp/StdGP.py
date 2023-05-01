@@ -73,7 +73,8 @@ class StdGP:
 
 	def __init__(self, operators=[("+",2),("-",2),("*",2),("/",2)], max_initial_depth = 6, population_size = 500, 
 		max_generation = 100, tournament_size = 5, elitism_size = 1, max_depth = 17, 
-		threads=1, random_state = 42, verbose = True, model_name="SimpleThresholdClassifier", fitnessType="Accuracy"):
+		threads=1, random_state = 42, verbose = True, model_name="SimpleThresholdClassifier", fitnessType="Accuracy",
+		Sf, Sp, switch):
 
 		if sum( [0 if op in [("+",2),("-",2),("*",2),("/",2)] else 0 for op in operators ] ) > 0:
 			print( "[Warning] Some of the following operators may not be supported:", operators)
@@ -85,6 +86,10 @@ class StdGP:
 		self.threads = max(1, threads)
 		self.random_state = random_state
 		self.rng = Random(random_state)
+		
+		self.Sf = Sf
+		self.Sp = Sp
+		self.switch = switch
 
 		self.max_depth = max_depth
 		self.max_generation = max_generation

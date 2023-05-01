@@ -284,9 +284,7 @@ class StdGP:
 		return genLimit  or perfectTraining
 
 
-
-
-        def nextGeneration(self):
+	def nextGeneration(self):
 		'''
 		Generation algorithm: the population is sorted; the best individual is pruned;
 		the elite is selected; and the offspring are created.

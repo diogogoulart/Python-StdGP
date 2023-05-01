@@ -9,43 +9,11 @@ from .Node import Node
 # Copyright ©2019-2022 J. E. Batista
 #
 
-def double_tournament(rng, population, Sf, Sp, Switch=False):
-	"""
-	Selects "n" Individuals from the population and returns a single Individual
-	using double tournament selection based on fitness and parsimony.
-
-	Parameters:
-	population (list): A list of Individuals, sorted from best to worse.
-	Sf (int): The fitness tournament size.
-	Sp (int): The parsimony tournament size.
-	Switch (bool): If True, qualifiers select on size and the final selects on fitness;
-			     If False, qualifiers select on fitness and the final selects on size.
-	"""
-
-	def select_by_fitness(population, n):
-		candidates = [rng.randint(0, len(population) - 1) for i in range(n)]
-		return population[min(candidates)]
-
-	def select_by_size(population, n):
-		candidates = [rng.randint(0, len(population) - 1) for i in range(n)]
-		return min(candidates, key=lambda x: len(population[x].genome))
-
-	if Switch:
-		# Size -> Fitness
-		first_round_winners = [select_by_size(population, Sf) for _ in range(Sp)]
-		return select_by_fitness(first_round_winners, Sp)
-	else:
-		# Fitness -> Size
-		first_round_winners = [select_by_fitness(population, Sf) for _ in range(Sp)]
-		return select_by_size(first_round_winners, Sp)
-
-
 
 def tournament(rng, population,n):
 	'''
 	Selects "n" Individuals from the population and return a 
 	single Individual.
-
 	Parameters:
 	population (list): A list of Individuals, sorted from best to worse.
 	'''
@@ -56,25 +24,31 @@ def tournament(rng, population,n):
 def getElite(population,n):
 	'''
 	Returns the "n" best Individuals in the population.
-
 	Parameters:
 	population (list): A list of Individuals, sorted from best to worse.
 	'''
 	return population[:n]
 
 
-# Modify the getOffspring function to use the double_tournament method
-def getOffspring(rng, population, Sf, Sp, do_fitness_first=False):
-	parent1 = double_tournament(rng, population, Sf, Sp, do_fitness_first)
-	parent2 = double_tournament(rng, population, Sf, Sp, do_fitness_first)
+def getOffspring(rng, population, tournament_size):
+	'''
+	Genetic Operator: Selects a genetic operator and returns a list with the 
+	offspring Individuals. The crossover GOs return two Individuals and the
+	mutation GO returns one individual. Individuals over the LIMIT_DEPTH are 
+	then excluded, making it possible for this method to return an empty list.
+	Parameters:
+	population (list): A list of Individuals, sorted from best to worse.
+	'''
+	isCross = rng.random()<0.5
 
-	offspring1 = parent1.crossover(parent2, rng)
-	offspring1.mutate(rng)
+	desc = None
 
-	offspring2 = parent2.crossover(parent1, rng)
-	offspring2.mutate(rng)
+	if isCross:
+		desc = STXO(rng, population, tournament_size)
+	else:
+		desc = STMUT(rng, population, tournament_size)
 
-	return [offspring1, offspring2]
+	return desc
 
 
 def discardDeep(population, limit):
@@ -89,7 +63,6 @@ def STXO(rng, population, tournament_size):
 	'''
 	Randomly selects one node from each of two individuals; swaps the node and
 	sub-nodes; and returns the two new Individuals as the offspring.
-
 	Parameters:
 	population (list): A list of Individuals, sorted from best to worse.
 	'''
@@ -116,7 +89,6 @@ def STMUT(rng, population, tournament_size):
 	'''
 	Randomly selects one node from a single individual; swaps the node with a 
 	new, node generated using Grow; and returns the new Individual as the offspring.
-
 	Parameters:
 	population (list): A list of Individuals, sorted from best to worse.
 	'''
@@ -132,4 +104,4 @@ def STMUT(rng, population, tournament_size):
 	i = Individual(ind1.operators, ind1.terminals, ind1.max_depth, ind1.model_name, ind1.fitnessType)
 	i.copy(h1)
 	ret.append(i)
-	return ret
+	return 

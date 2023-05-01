@@ -33,14 +33,12 @@ class Individual:
 
 	model = None
 
-	def __init__(self, operators, terminals, max_depth, genome, model_name="SimpleThresholdClassifier", fitnessType="Accuracy"):
+	def __init__(self, operators, terminals, max_depth, model_name="SimpleThresholdClassifier", fitnessType="Accuracy"):
 		self.operators = operators
 		self.terminals = terminals
 		self.max_depth = max_depth
-		self.genome = genome
 		self.model_name = model_name
 		self.fitnessType = fitnessType
-
 
 	def create(self,rng):
 		self.head = Node()
@@ -73,7 +71,7 @@ class Individual:
 			return SimpleThresholdClassifier()
 
 
-	def fit(self, Tr_x, Tr_y, Te_x=None, Te_y=None):
+	def fit(self, Tr_x, Tr_y):
 		'''
 		Trains the classifier which will be used in the fitness function
 		'''
@@ -82,16 +80,10 @@ class Individual:
 			self.training_Y = Tr_y
 
 			self.model = self.createModel()
-			print("Model created:", self.model)  # Add this line to check if the model is being created
-
+	
 			hyper_X = self.convert(Tr_x)
-			self.model.fit(hyper_X, Tr_y)
 
-		if Te_x is not None and Te_y is not None:
-			# Process the test data here
-			pass
-
-
+			self.model.fit(hyper_X,Tr_y)
 
 	def getHead(self):
 		return self.head.clone()
@@ -305,6 +297,3 @@ class Individual:
 			state = str(d)
 			d.prun(self.training_X)
 			done = state == str(d)
-
-
-

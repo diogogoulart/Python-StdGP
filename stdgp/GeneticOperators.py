@@ -42,7 +42,7 @@ def getElite(population,n):
 	return population[:n]
 
 
-def getOffspring(rng, population, tournament_size):
+def getOffspring(rng, population, tournament_size, double_tournament=False, Sf=7, Sp=3, switch=False):
 	'''
 	Genetic Operator: Selects a genetic operator and returns a list with the 
 	offspring Individuals. The crossover GOs return two Individuals and the
@@ -51,16 +51,20 @@ def getOffspring(rng, population, tournament_size):
 	Parameters:
 	population (list): A list of Individuals, sorted from best to worse.
 	'''
-	isCross = rng.random()<0.5
 
-	desc = None
+	if double_tournament:
+		parent1 = double_tournament(rng, population, Sf, Sp, switch, custom_fitness=accuracy)
+		parent2 = double_tournament(rng, population, Sf, Sp, switch, custom_fitness=accuracy)
+	else:
+		parent1 = tournament(rng, population, tournament_size)
+		parent2 = tournament(rng, population, tournament_size)
+    
+	isCross = rng.random() < 0.5
 
 	if isCross:
-		desc = STXO(rng, population, tournament_size)
+		return STXO(rng, parent1, parent2)
 	else:
-		desc = STMUT(rng, population, tournament_size)
-
-	return desc
+		return STMUT(rng, parent1)
 
 
 def discardDeep(population, limit):

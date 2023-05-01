@@ -9,18 +9,36 @@ from .Node import Node
 # Copyright ©2019-2022 J. E. Batista
 #
 
-def double_tournament(population, Sf, Sp, switch=False, fitness_key='fitness'):
-    # Perform Sf tournaments based on fitness or size, depending on the switch value
-    if switch:
-        winners = [tournament(population, Sf, key='size') for _ in range(Sp)]
-    else:
-        winners = [tournament(population, Sf, key=fitness_key) for _ in range(Sp)]
+def double_tournament(rng, population, Sf, Sp, Switch=False):
+    """
+    Selects "n" Individuals from the population and returns a single Individual
+    using double tournament selection based on fitness and parsimony.
+    
+    Parameters:
+    population (list): A list of Individuals, sorted from best to worse.
+    Sf (int): The fitness tournament size.
+    Sp (int): The parsimony tournament size.
+    Switch (bool): If True, qualifiers select on size and the final selects on fitness;
+                             If False, qualifiers select on fitness and the final selects on size.
+    """
 
-    # Perform the final tournament based on size or fitness, depending on the switch value
-    if switch:
-        return tournament(winners, Sp, key=fitness_key)
+    def select_by_fitness(population, n):
+        candidates = [rng.randint(0, len(population) - 1) for i in range(n)]
+        return population[min(candidates)]
+
+    def select_by_size(population, n):
+        candidates = [rng.randint(0, len(population) - 1) for i in range(n)]
+        return min(candidates, key=lambda x: len(population[x].genome))
+
+    if Switch:
+        # Size -> Fitness
+        first_round_winners = [select_by_size(population, Sf) for _ in range(Sp)]
+        return select_by_fitness(first_round_winners, Sp)
     else:
-        return tournament(winners, Sp, key='size')
+        # Fitness -> Size
+        first_round_winners = [select_by_fitness(population, Sf) for _ in range(Sp)]
+        return select_by_size(first_round_winners, Sp)
+
 
 
 def tournament(rng, population,n):

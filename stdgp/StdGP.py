@@ -90,6 +90,7 @@ class StdGP:
 		self.Sf = Sf
 		self.Sp = Sp
 		self.switch = switch
+		self.genome = None
 
 		self.max_depth = max_depth
 		self.max_generation = max_generation

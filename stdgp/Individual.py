@@ -33,12 +33,14 @@ class Individual:
 
 	model = None
 
-	def __init__(self, operators, terminals, max_depth, model_name="SimpleThresholdClassifier", fitnessType="Accuracy"):
+	def __init__(self, operators, terminals, max_depth, genome, model_name="SimpleThresholdClassifier", fitnessType="Accuracy"):
 		self.operators = operators
 		self.terminals = terminals
 		self.max_depth = max_depth
+		self.genome = genome
 		self.model_name = model_name
 		self.fitnessType = fitnessType
+
 
 	def create(self,rng):
 		self.head = Node()

@@ -1,5 +1,5 @@
 from .Individual import Individual
-from .GeneticOperators import getElite, getOffspring, discardDeep, double_tournament
+from .GeneticOperators import getElite, getOffspring, discardDeep
 import multiprocessing as mp
 import time
 
@@ -17,11 +17,11 @@ import warnings
 warnings.filterwarnings("ignore")
 
 class ClassifierNotTrainedError(Exception):
-	""" You tried to use the classifier before training it. """
+    """ You tried to use the classifier before training it. """
 
-	def __init__(self, expression, message = ""):
-		self.expression = expression
-		self.message = message
+    def __init__(self, expression, message = ""):
+        self.expression = expression
+        self.message = message
 
 
 class StdGP:
@@ -73,8 +73,7 @@ class StdGP:
 
 	def __init__(self, operators=[("+",2),("-",2),("*",2),("/",2)], max_initial_depth = 6, population_size = 500, 
 		max_generation = 100, tournament_size = 5, elitism_size = 1, max_depth = 17, 
-		threads=1, random_state = 42, verbose = True, model_name="SimpleThresholdClassifier", fitnessType="Accuracy",
-		Sf=7, Sp=3, switch=False):
+		threads=1, random_state = 42, verbose = True, model_name="SimpleThresholdClassifier", fitnessType="Accuracy"):
 
 		if sum( [0 if op in [("+",2),("-",2),("*",2),("/",2)] else 0 for op in operators ] ) > 0:
 			print( "[Warning] Some of the following operators may not be supported:", operators)
@@ -86,11 +85,6 @@ class StdGP:
 		self.threads = max(1, threads)
 		self.random_state = random_state
 		self.rng = Random(random_state)
-		
-		self.Sf = Sf
-		self.Sp = Sp
-		self.switch = switch
-		self.genome = None
 
 		self.max_depth = max_depth
 		self.max_generation = max_generation
@@ -284,6 +278,8 @@ class StdGP:
 		return genLimit  or perfectTraining
 
 
+
+
 	def nextGeneration(self):
 		'''
 		Generation algorithm: the population is sorted; the best individual is pruned;
@@ -294,7 +290,7 @@ class StdGP:
 		# Calculates the accuracy of the population using multiprocessing
 		if self.threads > 1:
 			with mp.Pool(processes= self.threads) as pool:
-				results = pool.map(fitIndividuals, [(ind, self.Tr_x, self.Tr_y) for ind in self.population])
+				results = pool.map(fitIndividuals, [(ind, self.Tr_x, self.Tr_y) for ind in self.population] )
 				for i in range(len(self.population)):
 					self.population[i].trainingPredictions = results[i][0]
 					self.population[i].fitness = results[i][1]
@@ -302,11 +298,12 @@ class StdGP:
 					self.population[i].training_X = self.Tr_x
 					self.population[i].training_Y = self.Tr_y
 		else:
-			[ind.fit(self.Tr_x, self.Tr_y) for ind in self.population]
-			[ind.getFitness() for ind in self.population]
+			[ ind.fit(self.Tr_x, self.Tr_y) for ind in self.population]
+			[ ind.getFitness() for ind in self.population ]
 
 		# Sort the population from best to worse
 		self.population.sort(reverse=True)
+
 
 		# Update best individual
 		if self.population[0] > self.bestIndividual:
@@ -316,12 +313,35 @@ class StdGP:
 		newPopulation = []
 		newPopulation.extend(getElite(self.population, self.elitism_size))
 		while len(newPopulation) < self.population_size:
-			offspring = getOffspring(self.rng, self.population, self.Sf, self.Sp, self.switch)
+			offspring = getOffspring(self.rng, self.population, self.tournament_size)
 			offspring = discardDeep(offspring, self.max_depth)
 			newPopulation.extend(offspring)
 		self.population = newPopulation[:self.population_size]
 
+
 		end = time.time()
+
+
+		# Debug
+		if self.verbose and self.currentGeneration%5==0:
+			if not self.Te_x is None:
+				print("   > Gen #%2d:  Fitness: %.6f // Tr-Score: %.6f // Te-Score: %.6f  // Time: %.4f" % (self.currentGeneration, self.bestIndividual.getFitness(), self.bestIndividual.getTrainingMeasure(), self.bestIndividual.getTestMeasure(self.Te_x, self.Te_y), end- begin )  )
+			else:
+				print("   > Gen #%2d:  Fitness: %.6f // Tr-Score: %.6f // Time: %.4f" % (self.currentGeneration, self.bestIndividual.getFitness(),  self.bestIndividual.getTrainingMeasure(), end- begin )  )
+
+
+
+	def predict(self, dataset):
+		'''
+		Returns the predictions for the samples in a dataset.
+		'''
+		self.checkIfTrained()
+
+		return self.population.getBestIndividual().predict(dataset)
+
+		return "Population Not Trained" if self.bestIndividual == None else self.bestIndividual.predict(sample)
+
+
 
 
 
@@ -340,6 +360,3 @@ def fitIndividuals(a):
 
 	
 	return ret 
-
-
-

@@ -1,5 +1,5 @@
 from .Individual import Individual
-from .GeneticOperators import getElite, getOffspring, discardDeep
+from .GeneticOperators import getElite, getOffspring, discardDeep, double_tournament
 import multiprocessing as mp
 import time
 
@@ -73,7 +73,8 @@ class StdGP:
 
 	def __init__(self, operators=[("+",2),("-",2),("*",2),("/",2)], max_initial_depth = 6, population_size = 500, 
 		max_generation = 100, tournament_size = 5, elitism_size = 1, max_depth = 17, 
-		threads=1, random_state = 42, verbose = True, model_name="SimpleThresholdClassifier", fitnessType="Accuracy"):
+		threads=1, random_state = 42, verbose = True, model_name="SimpleThresholdClassifier", fitnessType="Accuracy"
+		, Sf=None, Sp=None, switch=False):
 
 		if sum( [0 if op in [("+",2),("-",2),("*",2),("/",2)] else 0 for op in operators ] ) > 0:
 			print( "[Warning] Some of the following operators may not be supported:", operators)
@@ -93,6 +94,10 @@ class StdGP:
 
 		self.model_name = model_name
 		self.fitnessType = fitnessType
+		
+		self.Sf = Sf
+		self.Sp = Sp
+		self.switch = switch
 
 		self.verbose = verbose
 
@@ -205,6 +210,13 @@ class StdGP:
 			ind = Individual(self.operators, self.terminals, self.max_depth, self.model_name, self.fitnessType)
 			ind.create(self.rng)
 			self.population.append(ind)
+			
+			if self.Sf is not None and self.Sp is not None:
+				parent1 = double_tournament(self.population, self.Sf, self.Sp, self.switch, fitness_key=self.fitness_key)
+				parent2 = double_tournament(self.population, self.Sf, self.Sp, self.switch, fitness_key=self.fitness_key)
+			else:
+				parent1 = tournament(self.population, self.tournament_size, key=self.fitness_key)
+				parent2 = tournament(self.population, self.tournament_size, key=self.fitness_key)
 
 		self.bestIndividual = self.population[0]
 		self.bestIndividual.fit(self.Tr_x, self.Tr_y)
@@ -360,7 +372,6 @@ def fitIndividuals(a):
 
 	
 	return ret 
-
 
 
 

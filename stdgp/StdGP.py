@@ -287,53 +287,54 @@ class StdGP:
 
 
 	def nextGeneration(self):
-		'''
-		Generation algorithm: the population is sorted; the best individual is pruned;
-		the elite is selected; and the offspring are created.
-		'''
-		begin = time.time()
+	'''
+	Generation algorithm: the population is sorted; the best individual is pruned;
+	the elite is selected; and the offspring are created.
+	'''
+	begin = time.time()
 
-		# Calculates the accuracy of the population using multiprocessing
-		if self.threads > 1:
-			with mp.Pool(processes= self.threads) as pool:
-				results = pool.map(fitIndividuals, [(ind, self.Tr_x, self.Tr_y) for ind in self.population] )
-				for i in range(len(self.population)):
-					self.population[i].trainingPredictions = results[i][0]
-					self.population[i].fitness = results[i][1]
-					self.population[i].model = results[i][2]
-					self.population[i].training_X = self.Tr_x
-					self.population[i].training_Y = self.Tr_y
-		else:
-			[ ind.fit(self.Tr_x, self.Tr_y) for ind in self.population]
-			[ ind.getFitness() for ind in self.population ]
+	# Calculates the accuracy of the population using multiprocessing
+	if self.threads > 1:
+	    with mp.Pool(processes= self.threads) as pool:
+		results = pool.map(fitIndividuals, [(ind, self.Tr_x, self.Tr_y) for ind in self.population])
+		for i in range(len(self.population)):
+		    self.population[i].trainingPredictions = results[i][0]
+		    self.population[i].fitness = results[i][1]
+		    self.population[i].model = results[i][2]
+		    self.population[i].training_X = self.Tr_x
+		    self.population[i].training_Y = self.Tr_y
+	else:
+	    [ind.fit(self.Tr_x, self.Tr_y) for ind in self.population]
+	    [ind.getFitness() for ind in self.population]
 
-		# Sort the population from best to worse
-		self.population.sort(reverse=True)
+	# Sort the population from best to worse
+	self.population.sort(reverse=True)
 
+	# Update best individual
+	if self.population[0] > self.bestIndividual:
+	    self.bestIndividual = self.population[0]
 
-		# Update best individual
-		if self.population[0] > self.bestIndividual:
-			self.bestIndividual = self.population[0]
+	# Generating Next Generation
+	newPopulation = []
+	newPopulation.extend(getElite(self.population, self.elitism_size))
+	while len(newPopulation) < self.population_size:
+	    offspring = getOffspring(self.rng, self.population, self.Sf, self.Sp, self.switch)
+	    offspring = discardDeep(offspring, self.max_depth)
+	    newPopulation.extend(offspring)
+	self.population = newPopulation[:self.population_size]
 
-		# Generating Next Generation
-		newPopulation = []
-		newPopulation.extend(getElite(self.population, self.elitism_size))
-		while len(newPopulation) < self.population_size:
-        		offspring = getOffspring(self.rng, self.population, self.Sf, self.Sp, self.switch)
-			offspring = discardDeep(offspring, self.max_depth)
-			newPopulation.extend(offspring)
-		self.population = newPopulation[:self.population_size]
+	end = time.time()
 
-
-		end = time.time()
-
-
-		# Debug
-		if self.verbose and self.currentGeneration%5==0:
-			if not self.Te_x is None:
-				print("   > Gen #%2d:  Fitness: %.6f // Tr-Score: %.6f // Te-Score: %.6f  // Time: %.4f" % (self.currentGeneration, self.bestIndividual.getFitness(), self.bestIndividual.getTrainingMeasure(), self.bestIndividual.getTestMeasure(self.Te_x, self.Te_y), end- begin )  )
-			else:
-				print("   > Gen #%2d:  Fitness: %.6f // Tr-Score: %.6f // Time: %.4f" % (self.currentGeneration, self.bestIndividual.getFitness(),  self.bestIndividual.getTrainingMeasure(), end- begin )  )
+	# Debug
+	if self.verbose and self.currentGeneration % 5 == 0:
+	    if not self.Te_x is None:
+		print("   > Gen #%2d:  Fitness: %.6f // Tr-Score: %.6f // Te-Score: %.6f  // Time: %.4f" % (
+		    self.currentGeneration, self.bestIndividual.getFitness(), self.bestIndividual.getTrainingMeasure(),
+		    self.bestIndividual.getTestMeasure(self.Te_x, self.Te_y), end - begin))
+	    else:
+		print("   > Gen #%2d:  Fitness: %.6f // Tr-Score: %.6f // Time: %.4f" % (
+		    self.currentGeneration, self.bestIndividual.getFitness(), self.bestIndividual.getTrainingMeasure(),
+		    end - begin))
 
 
 

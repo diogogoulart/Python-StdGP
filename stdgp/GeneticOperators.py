@@ -126,7 +126,7 @@ def STXO(rng, population, tournament_size, Sf=Sf, Sp=Sp, switch=switch):
 	return ret
 
 
-def STMUT(rng, population, tournament_size, Sf=Sf, Sp=Sp, switch=switch):
+def STMUT(rng, population, tournament_size, Sf, Sp, switch):
 	'''
 	Randomly selects one node from a single individual; swaps the node with a 
 	new, node generated using Grow; and returns the new Individual as the offspring.

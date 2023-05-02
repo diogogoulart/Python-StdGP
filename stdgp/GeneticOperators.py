@@ -9,15 +9,26 @@ from .Node import Node
 # Copyright ©2019-2022 J. E. Batista
 #
 
-def double_tournament(rng, population, Sf, Sp, switch=False, custom_fitness=None):
+def double_tournament(population, Sf, Sp, switch=False):
+	def fitness_tournament(tournament_size):
+		selected = random.sample(population, tournament_size)
+		return max(selected, key=lambda x: x.fitness)
+
+	def parsimony_tournament(tournament_size):
+		selected = random.sample(population, tournament_size)
+		return min(selected, key=lambda x: x.size)
+
 	if switch:
-		size_tournament_winners = tournament(rng, population, Sf, custom_fitness)
-		fitness_tournament_winners = [size_tournament_winners[i] for i in rng.sample(range(Sf), Sp)]
-		return tournament(rng, fitness_tournament_winners, Sp)
+		first_tournament = parsimony_tournament
+		second_tournament = fitness_tournament
 	else:
-		fitness_tournament_winners = tournament(rng, population, Sf, custom_fitness)
-		size_tournament_winners = [fitness_tournament_winners[i] for i in rng.sample(range(Sf), Sp)]
-		return tournament(rng, size_tournament_winners, Sp, custom_fitness)
+		first_tournament = fitness_tournament
+		second_tournament = parsimony_tournament
+
+	winners = [first_tournament(Sf) for _ in range(Sf)]
+	selected = random.sample(winners, Sp)
+	return second_tournament(Sp)(selected)
+
 
 def tournament(rng, population, tournament_size, custom_fitness=None):
 	best = None

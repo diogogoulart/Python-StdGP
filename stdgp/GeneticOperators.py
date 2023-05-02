@@ -20,7 +20,7 @@ def double_tournament(rng, population, Sf, Sp, tournament_size ,switch=False, cu
     smallest = []
     if not switch:
         for _ in range(Sf):
-            best = tournament(rng, population, population_size, custom_fitness=None)
+            best = tournament(rng, population, tournament_size, custom_fitness=None)
             fittest.append(best)
         
         smallest = random.sample(fittest, Sp)

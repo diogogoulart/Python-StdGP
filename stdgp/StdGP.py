@@ -93,7 +93,7 @@ class StdGP:
 		
 		self.Sf = Sf
 		self.Sp = Sp
-		self.switch = switch
+		self.Switch = Switch
 
 
 		self.model_name = model_name

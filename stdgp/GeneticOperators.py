@@ -28,7 +28,7 @@ def double_tournament(rng, population, tournament_size, Sf, Sp, Switch):
 		for _ in range(Sp):
 			fittest.append(fitness_tournament(rng, population,n))
 		candidates = fittest
-		return population[min(candidates)
+		return population[min(candidates)]
 		print(f"New best: {best}")  # Debugging
 		return best[0]	
 	
@@ -56,7 +56,7 @@ def fitness_tournament(rng, population,n):
 	'''
 
 	candidates = [rng.randint(0,len(population)-1) for i in range(n)]
-	return population[min(candidates)
+	return population[min(candidates)]
 
 
 def getElite(population,n):

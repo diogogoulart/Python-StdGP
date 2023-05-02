@@ -24,7 +24,7 @@ def double_tournament(rng, population, tournament_size, Sf, Sp, Switch):
 				best = (competitor, competitor_fitness)
 		print(f"New best: {best}")  # Debugging
 		return best[0]
-	Else:
+	else:
 		for _ in range(Sp):
 			fittest.append(fitness_tournament(rng, population,n))
 		candidates = fittest

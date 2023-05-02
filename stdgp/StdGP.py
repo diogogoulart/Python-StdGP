@@ -317,7 +317,8 @@ class StdGP:
 
 		# Generating Next Generation
 		newPopulation = []
-		newPopulation.extend(getElite(self.population, self.elitism_size))
+		##newPopulation.extend(getElite(self.population, self.elitism_size))
+		newPopulation = [self.getBest()]
 		while len(newPopulation) < self.population_size:
 			#offspring = double_tournament(self.population, self.Sf, self.Sp, self.switch)
 			##offspring = double_tournament(self.population, self.Sf, self.Sp, self.tournament_size, self.switch)

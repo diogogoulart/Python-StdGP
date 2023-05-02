@@ -9,32 +9,54 @@ from .Node import Node
 # Copyright ©2019-2022 J. E. Batista
 #
 
+def double_tournament(rng, population, tournament_size, Sf, Sp, Switch):
+	best=None
+	fittest=[]
+	smallest=[]
+	if Switch == False:
+		for _ in range(Sf):
+			fittest.append(fitness_tournament(rng, population,n))
+		for _ in range(Sp):
+			competitor = rng.choice(fittest)
+			competitor_size = competitor.size
+			competitor_fitness = 1 / (1 + competitor_size)
+			if best is None or competitor_fitness > best[1]:
+				best = (competitor, competitor_fitness)
+		print(f"New best: {best}")  # Debugging
+		return best[0]
+	Else:
+		for _ in range(Sp):
+			fittest.append(fitness_tournament(rng, population,n))
+		candidates = fittest
+		return population[min(candidates)
+		print(f"New best: {best}")  # Debugging
+		return best[0]	
+	
+
 
 def parsimony_tournament(rng, population, tournament_size):
-    best = None
-    for _ in range(tournament_size):
-        competitor = rng.choice(population)
-        print(f"Competitor: {competitor}")  # Debugging
-        competitor_size = competitor.size
-        competitor_fitness = 1 / (1 + competitor_size)
-        print(f"Competitor size: {competitor_size}")  # Debugging
-        print(f"Competitor fitness: {competitor_fitness}")  # Debugging
-        if best is None or competitor_fitness > best[1]:
-            best = (competitor, competitor_fitness)
-            print(f"New best: {best}")  # Debugging
-    return best[0]
+	best = None
+	for _ in range(tournament_size):
+		competitor = rng.choice(population)
+		competitor_size = competitor.size
+		competitor_fitness = 1 / (1 + competitor_size)
+		if best is None or competitor_fitness > best[1]:
+			best = (competitor, competitor_fitness)
+	print(f"New best: {best}")  # Debugging
+	return best[0]
 
 
-
-'''def tournament(rng, population,n):
+def fitness_tournament(rng, population,n):
+	'''
 	Selects "n" Individuals from the population and return a 
 	single Individual.
 
 	Parameters:
 	population (list): A list of Individuals, sorted from best to worse.
+	'''
 
 	candidates = [rng.randint(0,len(population)-1) for i in range(n)]
-	return population[min(candidates)]'''
+	return population[min(candidates)
 
 
 def getElite(population,n):

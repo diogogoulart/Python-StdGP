@@ -15,12 +15,15 @@ def parsimony_tournament(rng, population, tournament_size):
     for _ in range(tournament_size):
         competitor = rng.choice(population)
         print(f"Competitor: {competitor}")  # Debugging
-        competitor_fitness = competitor.size
-        print(f"Competitor size: {competitor_fitness}")  # Debugging
-        if best is None or competitor_fitness < best[1]:
+        competitor_size = competitor.size
+        competitor_fitness = 1 / (1 + competitor_size)
+        print(f"Competitor size: {competitor_size}")  # Debugging
+        print(f"Competitor fitness: {competitor_fitness}")  # Debugging
+        if best is None or competitor_fitness > best[1]:
             best = (competitor, competitor_fitness)
             print(f"New best: {best}")  # Debugging
     return best[0]
+
 
 
 '''def tournament(rng, population,n):

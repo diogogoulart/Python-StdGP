@@ -24,16 +24,15 @@ def double_tournament(population, Sf, Sp, switch=False):
         Sp, Sf = Sf, Sp
 
     if not switch:
-        winners = [first_tournament(Sf) for _ in range(Sf)]
-        selected = random.sample(winners, Sp)
-        parsimony_winners = [second_tournament(Sp) for _ in selected]
+        fitness_winners = [first_tournament(Sf) for _ in range(Sf)]
+        parsimony_winners = [second_tournament(Sp) for _ in fitness_winners]
 
     else:
-        winners = [second_tournament(Sf) for _ in range(Sf)]
-        selected = random.sample(winners, Sp)
-        parsimony_winners = [first_tournament(Sp) for _ in selected]
+        parsimony_winners = [second_tournament(Sf) for _ in range(Sf)]
+        fitness_winners = [first_tournament(Sp) for _ in parsimony_winners]
 
-    return parsimony_winners
+    return fitness_winners + parsimony_winners
+
 
 
 

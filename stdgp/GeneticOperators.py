@@ -26,7 +26,7 @@ def double_tournament(population, Sf, Sp, switch=False):
 		Sp, Sf = Sf, Sp
 
 	selected = random.sample(winners, Sp)
-	return second_tournament(Sp)
+	return [second_tournament(Sp) for _ in selected]
 
 
 

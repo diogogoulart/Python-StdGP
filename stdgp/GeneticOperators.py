@@ -1,5 +1,7 @@
 from .Individual import Individual
 from .Node import Node
+import random
+
 
 # 
 # By using this file, you are agreeing to this product's EULA

@@ -99,7 +99,7 @@ def discardDeep(population, limit):
 	return ret
 
 
-def STXO(rng, population, tournament_size, Sf=Sf, Sp=Sp, switch=switch):
+def STXO(rng, population, tournament_size, Sf, Sp, switch):
 	'''
 	Randomly selects one node from each of two individuals; swaps the node and
 	sub-nodes; and returns the two new Individuals as the offspring.

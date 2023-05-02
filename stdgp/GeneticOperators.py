@@ -99,7 +99,7 @@ def discardDeep(population, limit):
 	return ret
 
 
-def STXO(rng, population, tournament_size):
+def STXO(rng, population, tournament_size, Sf=Sf, Sp=Sp, switch=switch):
 	'''
 	Randomly selects one node from each of two individuals; swaps the node and
 	sub-nodes; and returns the two new Individuals as the offspring.
@@ -107,8 +107,8 @@ def STXO(rng, population, tournament_size):
 	Parameters:
 	population (list): A list of Individuals, sorted from best to worse.
 	'''
-	ind1 = double_tournament(rng, population, tournament_size)
-	ind2 = double_tournament(rng, population, tournament_size)
+	ind1 = double_tournament(rng, population, tournament_size, Sf=Sf, Sp=Sp, switch=switch)
+	ind2 = double_tournament(rng, population, tournament_size, Sf=Sf, Sp=Sp, switch=switch)
 
 	h1 = ind1.getHead()
 	h2 = ind2.getHead()
@@ -126,7 +126,7 @@ def STXO(rng, population, tournament_size):
 	return ret
 
 
-def STMUT(rng, population, tournament_size):
+def STMUT(rng, population, tournament_size, Sf=Sf, Sp=Sp, switch=switch):
 	'''
 	Randomly selects one node from a single individual; swaps the node with a 
 	new, node generated using Grow; and returns the new Individual as the offspring.
@@ -134,7 +134,7 @@ def STMUT(rng, population, tournament_size):
 	Parameters:
 	population (list): A list of Individuals, sorted from best to worse.
 	'''
-	ind1 = double_tournament(rng, population, tournament_size)
+	ind1 = double_tournament(rng, population, tournament_size, Sf=Sf, Sp=Sp, switch=switch)
 	h1 = ind1.getHead()
 	n1 = h1.getRandomNode(rng)
 	n = Node()

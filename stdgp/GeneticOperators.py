@@ -92,16 +92,13 @@ import random
 
 
 def double_tournament(rng, population, Sf, Sp, tournament_size ,switch=False, custom_fitness=None):
-	best = None
-	for _ in range(tournament_size):
-		competitor = rng.choice(population)
-		if custom_fitness:
-			competitor_fitness = (competitor.size)
-		else:
-			competitor_fitness = competitor.size
-		if best is None or competitor_fitness > best[1]:
-			best = (competitor, competitor_fitness)
-	return best[0]
+    best = None
+    for _ in range(tournament_size):
+        competitor = rng.choice(population)
+        competitor_fitness = competitor.size
+        if best is None or competitor_fitness < best[1]:
+            best = (competitor, competitor_fitness)
+    return best[0]
 
 def tournament(rng, population, tournament_size, custom_fitness=None):
 	best = None

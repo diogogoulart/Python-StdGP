@@ -22,14 +22,12 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 			competitor_fitness = 1 / (1 + competitor_size)
 			if best is None or competitor_fitness > best[1]:
 				best = (competitor, competitor_fitness)
-		print(f"New best: {best}")  # Debugging
 		return best[0]
 	else:
 		for _ in range(Sp):
 			fittest.append(fitness_tournament(rng, population,n))
 		candidates = fittest
 		return population[min(candidates)]
-		print(f"New best: {best}")  # Debugging
 		return best[0]	
 	
 
@@ -42,7 +40,6 @@ def parsimony_tournament(rng, population, n):
 		competitor_fitness = 1 / (1 + competitor_size)
 		if best is None or competitor_fitness > best[1]:
 			best = (competitor, competitor_fitness)
-	print(f"New best: {best}")  # Debugging
 	return best[0]
 
 

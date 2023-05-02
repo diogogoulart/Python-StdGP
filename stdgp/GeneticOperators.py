@@ -96,8 +96,10 @@ def double_tournament(rng, population, Sf, Sp, tournament_size ,switch=False, cu
     for _ in range(tournament_size):
         competitor = rng.choice(population)
         competitor_fitness = competitor.size
+        print(f"Competitor size: {competitor_fitness}")  # Debugging
         if best is None or competitor_fitness < best[1]:
             best = (competitor, competitor_fitness)
+            print(f"New best: {best}")  # Debugging
     return best[0]
 
 def tournament(rng, population, tournament_size, custom_fitness=None):

@@ -24,13 +24,12 @@ def parsimony_tournament(rng, population, tournament_size):
 
 
 '''def tournament(rng, population,n):
-	'''
 	Selects "n" Individuals from the population and return a 
 	single Individual.
 
 	Parameters:
 	population (list): A list of Individuals, sorted from best to worse.
-	'''
+
 	candidates = [rng.randint(0,len(population)-1) for i in range(n)]
 	return population[min(candidates)]'''
 

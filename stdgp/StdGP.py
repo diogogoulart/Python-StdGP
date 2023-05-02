@@ -321,7 +321,7 @@ class StdGP:
 		while len(newPopulation) < self.population_size:
 			#offspring = double_tournament(self.population, self.Sf, self.Sp, self.switch)
 			##offspring = double_tournament(self.population, self.Sf, self.Sp, self.tournament_size, self.switch)
-			offspring = parsimony_tournament(self.population, self.tournament_size)
+			offspring = parsimony_tournament(self.rng, self.population, self.tournament_size)
 			offspring = discardDeep(offspring, self.max_depth)
 			newPopulation.extend(offspring)
 		self.population = newPopulation[:self.population_size]

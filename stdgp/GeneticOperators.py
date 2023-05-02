@@ -69,7 +69,7 @@ def getElite(population,n):
 	return population[:n]
 
 
-def getOffspring(rng, population, tournament_size):
+def getOffspring(rng, population, tournament_size, Sf, Sp, Switch):
 	'''
 	Genetic Operator: Selects a genetic operator and returns a list with the 
 	offspring Individuals. The crossover GOs return two Individuals and the
@@ -84,9 +84,9 @@ def getOffspring(rng, population, tournament_size):
 	desc = None
 
 	if isCross:
-		desc = STXO(rng, population, tournament_size)
+		desc = STXO(rng, population, tournament_size, Sf, Sp, Switch)
 	else:
-		desc = STMUT(rng, population, tournament_size)
+		desc = STMUT(rng, population, tournament_size, Sf, Sp, Switch)
 
 	return desc
 

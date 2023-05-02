@@ -12,24 +12,22 @@ import random
 #
 
 def double_tournament(population, Sf, Sp, switch=False):
-	def fitness_tournament(tournament_size):
+	def first_tournament(tournament_size):
 		selected = random.sample(population, tournament_size)
 		return max(selected, key=lambda x: x.fitness)
 
-	def parsimony_tournament(tournament_size):
+	def second_tournament(tournament_size):
 		selected = random.sample(population, tournament_size)
 		return min(selected, key=lambda x: x.size)
 
-	if switch:
-		first_tournament = parsimony_tournament
-		second_tournament = fitness_tournament
-	else:
-		first_tournament = fitness_tournament
-		second_tournament = parsimony_tournament
-
 	winners = [first_tournament(Sf) for _ in range(Sf)]
+
+	if switch:
+		Sp, Sf = Sf, Sp
+
 	selected = random.sample(winners, Sp)
-	return second_tournament(Sp)(selected)
+	return second_tournament(Sp)
+
 
 
 def tournament(rng, population, tournament_size, custom_fitness=None):

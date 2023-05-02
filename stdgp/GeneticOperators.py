@@ -25,11 +25,18 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 		return best[0]
 	else:
 		for _ in range(Sp):
+			fittest.append(fitness_tournament(rng, population, n))
+		candidates = [i for i, individual in enumerate(population) if individual in fittest]
+		fittest_idx = min(candidates, key=lambda idx: population[idx].fitness)
+		return population[fittest_idx]
+
+'''
+	else:
+		for _ in range(Sp):
 			fittest.append(fitness_tournament(rng, population,n))
 		candidates = fittest
 		return population[min(candidates)]
-		return best[0]	
-	
+		return best[0]'''
 
 
 def parsimony_tournament(rng, population, n):

@@ -11,7 +11,7 @@ import random
 # Copyright ©2019-2022 J. E. Batista
 #
 
-def double_tournament(rng, population, Sf, Sp, switch=False, custom_fitness=None):
+def double_tournament(rng, population, Sf, Sp, tournament_size=population_size,switch=False, custom_fitness=None):
     def parsimony_tournament(tournament_size):
         selected = random.sample(population, tournament_size)
         return min(selected, key=lambda x: x.size)
@@ -20,7 +20,7 @@ def double_tournament(rng, population, Sf, Sp, switch=False, custom_fitness=None
     smallest = []
     if not switch:
         for _ in range(Sf):
-            best = tournament(rng, population, tournament_size, custom_fitness=None)
+            best = tournament(rng, population, population_size, custom_fitness=None)
             fittest.append(best)
         
         smallest = random.sample(fittest, Sp)

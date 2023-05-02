@@ -72,7 +72,7 @@ class StdGP:
 
 
 	def __init__(self, operators=[("+",2),("-",2),("*",2),("/",2)], max_initial_depth = 6, population_size = 500, 
-		max_generation = 100, tournament_size = 5, elitism_size = 1, max_depth = 17, 
+		max_generation = 100, tournament_size = 5, elitism_size = 1, max_depth = 17, Sf=7, Sp=3, switch=False, 
 		threads=1, random_state = 42, verbose = True, model_name="SimpleThresholdClassifier", fitnessType="Accuracy"):
 
 		if sum( [0 if op in [("+",2),("-",2),("*",2),("/",2)] else 0 for op in operators ] ) > 0:
@@ -90,6 +90,11 @@ class StdGP:
 		self.max_generation = max_generation
 		self.tournament_size = tournament_size
 		self.elitism_size = elitism_size
+		
+		self.Sf = Sf
+		self.Sp = Sp
+		self.switch = switch
+
 
 		self.model_name = model_name
 		self.fitnessType = fitnessType

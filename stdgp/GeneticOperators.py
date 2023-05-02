@@ -34,7 +34,7 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 	
 
 
-def parsimony_tournament(rng, population, tournament_size):
+def parsimony_tournament(rng, population, n):
 	best = None
 	for _ in range(tournament_size):
 		competitor = rng.choice(population)

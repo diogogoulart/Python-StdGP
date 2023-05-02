@@ -1,5 +1,5 @@
 from .Individual import Individual
-from .GeneticOperators import getElite, getOffspring, discardDeep
+from .GeneticOperators import getElite, getOffspring, discardDeep, double_tournament
 import multiprocessing as mp
 import time
 
@@ -71,10 +71,10 @@ class StdGP:
 
 
 
-	def __init__(self, operators=[("+",2),("-",2),("*",2),("/",2)], max_initial_depth=6, population_size=500,
-					max_generation=100, tournament_size=5, elitism_size=1, max_depth=17,
-					threads=1, random_state=42, verbose=True, model_name="SimpleThresholdClassifier", fitnessType="Accuracy",
-					Sf=7, Sp=3, switch=False):
+		def __init__(self, operators=[("+",2),("-",2),("*",2),("/",2)], max_initial_depth = 6, population_size = 500, 
+		    max_generation = 100, tournament_size = 5, elitism_size = 1, max_depth = 17, 
+		    threads=1, random_state = 42, verbose = True, model_name="SimpleThresholdClassifier", fitnessType="Accuracy",
+		    Sf=7, Sp=3, switch=False):
 
 		if sum([0 if op in [("+",2),("-",2),("*",2),("/",2)] else 0 for op in operators]) > 0:
 			print("[Warning] Some of the following operators may not be supported:", operators)
@@ -319,7 +319,7 @@ class StdGP:
 		newPopulation = []
 		newPopulation.extend(getElite(self.population, self.elitism_size))
 		while len(newPopulation) < self.population_size:
-			offspring = getOffspring(self.rng, self.population, self.tournament_size, double_tournament=True, Sf=7, Sp=3, switch=False)
+			offspring = double_tournament(self.population, self.Sf, self.Sp, self.switch)
 			offspring = discardDeep(offspring, self.max_depth)
 			newPopulation.extend(offspring)
 		self.population = newPopulation[:self.population_size]

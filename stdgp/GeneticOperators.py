@@ -83,8 +83,8 @@ def STXO(rng, population, tournament_size):
 	Parameters:
 	population (list): A list of Individuals, sorted from best to worse.
 	'''
-	ind1 = tournament(rng, population, tournament_size)
-	ind2 = tournament(rng, population, tournament_size)
+	ind1 = parsimony_tournament(rng, population, tournament_size)
+	ind2 = parsimony_tournament(rng, population, tournament_size)
 
 	h1 = ind1.getHead()
 	h2 = ind2.getHead()
@@ -110,7 +110,7 @@ def STMUT(rng, population, tournament_size):
 	Parameters:
 	population (list): A list of Individuals, sorted from best to worse.
 	'''
-	ind1 = tournament(rng, population, tournament_size)
+	ind1 = parsimony_tournament(rng, population, tournament_size)
 	h1 = ind1.getHead()
 	n1 = h1.getRandomNode(rng)
 	n = Node()

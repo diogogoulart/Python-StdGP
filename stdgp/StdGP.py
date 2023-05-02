@@ -318,7 +318,7 @@ class StdGP:
 		newPopulation = []
 		newPopulation.extend(getElite(self.population, self.elitism_size))
 		while len(newPopulation) < self.population_size:
-			offspring = getOffspring(self.rng, self.population, self.tournament_size, Sf=self.Sf, Sp=self.Sp, switch=self.switch)
+			offspring = getOffspring(self.rng, self.population, self.tournament_size, self.Sf, self.Sp, self.switch)
 			offspring = discardDeep(offspring, self.max_depth)
 			newPopulation.extend(offspring)
 		self.population = newPopulation[:self.population_size]

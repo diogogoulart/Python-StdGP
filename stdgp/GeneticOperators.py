@@ -11,28 +11,62 @@ import random
 # Copyright ©2019-2022 J. E. Batista
 #
 
-def double_tournament(population, Sf, Sp, switch=False):
-    def first_tournament(tournament_size):
-        selected = random.sample(population, tournament_size)
-        return max(selected, key=lambda x: x.fitness)
-
-    def second_tournament(tournament_size):
+def double_tournament(rng, population, Sf, Sp, switch=False, custom_fitness=None):
+    def parsimony_tournament(tournament_size):
         selected = random.sample(population, tournament_size)
         return min(selected, key=lambda x: x.size)
-
-    if switch:
-        Sp, Sf = Sf, Sp
-
+    
+    fittest = []
+    smallest = []
     if not switch:
-        fitness_winners = [first_tournament(Sf) for _ in range(Sf)]
-        parsimony_winners = [second_tournament(Sp) for _ in fitness_winners]
-
+        for _ in range(Sf):
+            best = tournament(rng, population, tournament_size, custom_fitness=None)
+            fittest.append(best)
+        
+        smallest = random.sample(fittest, Sp)
+        for _ in range(Sp):
+            best = parsimony_tournament(tournament_size)
+            smallest.append(best)
+        
+        return smallest[-1]  # Return the best individual from the last parsimony tournament run
+    
     else:
-        parsimony_winners = [second_tournament(Sf) for _ in range(Sf)]
-        fitness_winners = [first_tournament(Sp) for _ in parsimony_winners]
+        for _ in range(Sp):
+            best = parsimony_tournament(tournament_size)
+            smallest.append(best)
+        
+        fittest = random.sample(smallest, Sf)
+        for _ in range(Sf):
+            best = tournament(rng, population, tournament_size, custom_fitness=None)
+            fittest.append(best)
+        
+        return fittest[-1]  # Return the best individual from the last fitness tournament run
 
-    return fitness_winners + parsimony_winners
 
+
+
+'''def double_tournament(rng, population, Sf, Sp, switch=False, , custom_fitness=None):
+	def parsonomy_tournament(tournament_size):
+		selected = random.sample(population, tournament_size)
+		return min(selected, key=lambda x: x.size)
+	
+	fittest=[]
+	smallest=[]
+	if not switch:
+		for i in Sf:
+			best=tournament(rng, population, tournament_size, custom_fitness=None)
+			fittest.append(best)
+		choice (fittest, Sp)
+		smallest.append(parsonomy_tournament(Sp))
+		return smallest
+	
+	else:
+		for i in Sp:
+			best=tournament(parsonomy_tournament(tournament_size))
+			smallest.append(best)
+		choice (fittest, Sf)
+		fittest.append(tournament(rng, population, tournament_size, custom_fitness=None))
+		return fittest'''
 
 
 

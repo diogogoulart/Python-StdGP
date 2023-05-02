@@ -9,7 +9,7 @@ from .Node import Node
 # Copyright ©2019-2022 J. E. Batista
 #
 
-def double_tournament(rng, population, tournament_size, Sf, Sp, Switch):
+def double_tournament(rng, population, n, Sf, Sp, Switch):
 	best=None
 	fittest=[]
 	smallest=[]

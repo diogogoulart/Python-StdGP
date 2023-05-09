@@ -41,7 +41,7 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 
 def parsimony_tournament(rng, population, n):
 	best = None
-	for _ in range(tournament_size):
+	for _ in range(n):
 		competitor = rng.choice(population)
 		competitor_size = competitor.size
 		competitor_fitness = 1 / (1 + competitor_size)

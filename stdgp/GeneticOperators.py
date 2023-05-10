@@ -48,6 +48,7 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 		return population[fittest_idx]'''
 	else:
 		print('Incompatible values of Sf and Sp')
+		
 
 '''
 	else:

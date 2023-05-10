@@ -55,7 +55,7 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 		fittest_idx = min(candidates, key=lambda idx: population[idx].fitness)
 		return population[fittest_idx]'''
 	else:
-		print('Incompatible values of Sf and Sp')
+		raise Exception('Incompatible values of Sf and Sp')
 		
 
 '''

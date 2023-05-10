@@ -17,7 +17,8 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 	After this for a Sf number of times an individual out of the previous tournament winners is chosen and compared to the previously selected individuals - the one with the highest value of accuracy is returned.
 	
 	The second tournament of each case did not use the tournament functions because it is not intended to use every winner from the previous tournament type, but only Sp of the Sf winners.
-	So it is almost the same code, just changed accordingly.	'''
+	So it is almost the same code, just changed accordingly.
+	If the competitor has the same fitness as the '''
 	best=None
 	fittest=[]
 	smallest=[]
@@ -48,20 +49,9 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 				if rng.random() < 0.5:
 					best = (competitor, competitor_fitness)
 		return best[0]
-		'''candidates = [i for i, individual in enumerate(population) if individual in smallest]
-		fittest_idx = min(candidates, key=lambda idx: population[idx].fitness)
-		return population[fittest_idx]'''
 	else:
 		raise Exception('Incompatible values of Sf and Sp')
-		
 
-'''
-	else:
-		for _ in range(Sp):
-			fittest.append(fitness_tournament(rng, population,n))
-		candidates = fittest
-		return population[min(candidates)]
-		return best[0]'''
 
 
 def parsimony_tournament(rng, population, n):

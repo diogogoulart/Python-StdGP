@@ -10,17 +10,14 @@ from .Node import Node
 #
 
 def double_tournament(rng, population, n, Sf, Sp, Switch):
-	'''
-	
-	If Switch is "False" is then fitness_tournament is called Sf number of times, and the best individual of each competition is saved to the list "fittest"; 
+	'''	If Switch is "False" is then fitness_tournament is called Sf number of times, and the best individual of each competition is saved to the list "fittest"; 
 	After this for a Sp number of times an individual out of the previous tournament winners is chosen and compared to the previously selected individuals, the one with the highest value of 1/(1+size(individual) ) is returned. 
 	
 	If the Switch is “True” then parsimony_tournament is called Sp number of times, and the best individual of each competition is saved to the list "smallest";
 	After this for a Sf number of times an individual out of the previous tournament winners is chosen and compared to the previously selected individuals - the one with the highest value of accuracy is returned.
 	
 	The second tournament of each case did not use the tournament functions because it is not intended to use every winner from the previous tournament type, but only Sp of the Sf winners.
-	So it is almost the same code, just changed accordingly.
-	'''
+	So it is almost the same code, just changed accordingly.	'''
 	best=None
 	fittest=[]
 	smallest=[]

@@ -24,7 +24,7 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 	best=None
 	fittest=[]
 	smallest=[]
-	if Switch == False:
+	if Switch == False and Sf >= Sp:
 		for _ in range(Sf):
 			fittest.append(fitness_tournament(rng, population,n))
 		for _ in range(Sp):
@@ -34,12 +34,20 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 			if best is None or competitor_fitness > best[1]:
 				best = (competitor, competitor_fitness)
 		return best[0]
-	else:
+	elif Switch==True and Sf <= Sp:
 		for _ in range(Sp):
 			smallest.append(parsimony_tournament(rng, population, n))
-		candidates = [i for i, individual in enumerate(population) if individual in smallest]
+		for f in range(Sf):
+			competitor = rng.choice(smallest)
+			competitor_fitness = competitor.fitness
+			if best is None or competitor_fitness > best[1]:
+				best = (competitor, competitor_fitness)
+		return best[0]
+		'''candidates = [i for i, individual in enumerate(population) if individual in smallest]
 		fittest_idx = min(candidates, key=lambda idx: population[idx].fitness)
-		return population[fittest_idx]
+		return population[fittest_idx]'''
+	else:
+		print('Incompatible values of Sf and Sp')
 
 '''
 	else:

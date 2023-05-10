@@ -33,6 +33,10 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 			competitor_fitness = 1 / (1 + competitor_size)
 			if best is None or competitor_fitness > best[1]:
 				best = (competitor, competitor_fitness)
+			elif competitor_fitness == best[1]:
+				# Randomly choose between the two individuals
+				if rng.random() < 0.5:
+					best = (competitor, competitor_fitness)
 		return best[0]
 	elif Switch==True and Sf <= Sp:
 		for _ in range(Sp):
@@ -42,6 +46,10 @@ def double_tournament(rng, population, n, Sf, Sp, Switch):
 			competitor_fitness = competitor.fitness
 			if best is None or competitor_fitness > best[1]:
 				best = (competitor, competitor_fitness)
+			elif competitor_fitness == best[1]:
+				# Randomly choose between the two individuals
+				if rng.random() < 0.5:
+					best = (competitor, competitor_fitness)
 		return best[0]
 		'''candidates = [i for i, individual in enumerate(population) if individual in smallest]
 		fittest_idx = min(candidates, key=lambda idx: population[idx].fitness)
